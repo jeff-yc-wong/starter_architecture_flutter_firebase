@@ -2,8 +2,7 @@ import 'package:starter_architecture_flutter_firebase/src/features/jobs/domain/j
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'entry_freezed.dart';
-import 'entry.g.dart';
+part 'entry.freezed.dart';
 
 typedef EntryID = String;
 
@@ -18,35 +17,27 @@ class Entry with _$Entry {
     required String comment,
   }) = _Entry;
 
+  double get durationInHours =>
+      end.difference(start).inMinutes.toDouble() / 60.0;
 
-
-  // double get durationInHours =>
-  //     end.difference(start).inMinutes.toDouble() / 60.0;
-
-  // factory Entry.fromMap(Map<dynamic, dynamic> value, EntryID id) {
-  //   final startMilliseconds = value['start'] as int;
-  //   final endMilliseconds = value['end'] as int;
-  //   return Entry(
-  //     id: id,
-  //     jobId: value['jobId'] as String,
-  //     start: DateTime.fromMillisecondsSinceEpoch(startMilliseconds),
-  //     end: DateTime.fromMillisecondsSinceEpoch(endMilliseconds),
-  //     comment: value['comment'] as String? ?? '',
-  //   );
-  // }
-
-  factory Entry.fromJson(Map<dynamic, dynamic> value) {
-    value['start'] = DateTime.fromMillisecondsSinceEpoch(value['start'] as int);
-    value['end'] = DateTime.fromMillisecondsSinceEpoch(value['end'] as int);
-    return  _$EntryFromJson(value);
+  factory Entry.fromJson(Map<dynamic, dynamic> json, EntryID id) {
+    final startMilliseconds = json['start'] as int;
+    final endMilliseconds = json['end'] as int;
+    return Entry(
+      id: id,
+      jobId: json['jobId'] as String,
+      start: DateTime.fromMillisecondsSinceEpoch(startMilliseconds),
+      end: DateTime.fromMillisecondsSinceEpoch(endMilliseconds),
+      comment: json['comment'] as String? ?? '',
+    );
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return <String, dynamic>{
-  //     'jobId': jobId,
-  //     'start': start.millisecondsSinceEpoch,
-  //     'end': end.millisecondsSinceEpoch,
-  //     'comment': comment,
-  //   };
-  // }
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'jobId': jobId,
+      'start': start.millisecondsSinceEpoch,
+      'end': end.millisecondsSinceEpoch,
+      'comment': comment,
+    };
+  }
 }
