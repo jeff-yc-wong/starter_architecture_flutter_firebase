@@ -3,6 +3,7 @@ import 'package:starter_architecture_flutter_firebase/src/features/jobs/domain/j
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'entry.freezed.dart';
+part 'entry.g.dart';
 
 typedef EntryID = String;
 
@@ -12,32 +13,23 @@ class Entry with _$Entry {
   const factory Entry({
     required EntryID id,
     required JobID jobId,
-    required DateTime start,
-    required DateTime end,
+    @EpochDateTimeConverter() required DateTime start,
+    @EpochDateTimeConverter() required DateTime end,
     required String comment,
   }) = _Entry;
 
   double get durationInHours =>
       end.difference(start).inMinutes.toDouble() / 60.0;
 
-  factory Entry.fromJson(Map<dynamic, dynamic> json, EntryID id) {
-    final startMilliseconds = json['start'] as int;
-    final endMilliseconds = json['end'] as int;
-    return Entry(
-      id: id,
-      jobId: json['jobId'] as String,
-      start: DateTime.fromMillisecondsSinceEpoch(startMilliseconds),
-      end: DateTime.fromMillisecondsSinceEpoch(endMilliseconds),
-      comment: json['comment'] as String? ?? '',
-    );
-  }
+  factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
+}
 
-  Map<String, dynamic> toJson() {
-    return <String, dynamic>{
-      'jobId': jobId,
-      'start': start.millisecondsSinceEpoch,
-      'end': end.millisecondsSinceEpoch,
-      'comment': comment,
-    };
-  }
+class EpochDateTimeConverter implements JsonConverter<DateTime, int> {
+  const EpochDateTimeConverter();
+
+  @override
+  DateTime fromJson(int json) => DateTime.fromMillisecondsSinceEpoch(json);
+
+  @override
+  int toJson(DateTime object) => object.millisecondsSinceEpoch;
 }

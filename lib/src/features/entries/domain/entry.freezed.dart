@@ -14,14 +14,21 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Entry _$EntryFromJson(Map<String, dynamic> json) {
+  return _Entry.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Entry {
   String get id => throw _privateConstructorUsedError;
   String get jobId => throw _privateConstructorUsedError;
+  @EpochDateTimeConverter()
   DateTime get start => throw _privateConstructorUsedError;
+  @EpochDateTimeConverter()
   DateTime get end => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $EntryCopyWith<Entry> get copyWith => throw _privateConstructorUsedError;
 }
@@ -32,7 +39,11 @@ abstract class $EntryCopyWith<$Res> {
       _$EntryCopyWithImpl<$Res, Entry>;
   @useResult
   $Res call(
-      {String id, String jobId, DateTime start, DateTime end, String comment});
+      {String id,
+      String jobId,
+      @EpochDateTimeConverter() DateTime start,
+      @EpochDateTimeConverter() DateTime end,
+      String comment});
 }
 
 /// @nodoc
@@ -87,7 +98,11 @@ abstract class _$$EntryImplCopyWith<$Res> implements $EntryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id, String jobId, DateTime start, DateTime end, String comment});
+      {String id,
+      String jobId,
+      @EpochDateTimeConverter() DateTime start,
+      @EpochDateTimeConverter() DateTime end,
+      String comment});
 }
 
 /// @nodoc
@@ -133,23 +148,28 @@ class __$$EntryImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$EntryImpl extends _Entry {
   const _$EntryImpl(
       {required this.id,
       required this.jobId,
-      required this.start,
-      required this.end,
+      @EpochDateTimeConverter() required this.start,
+      @EpochDateTimeConverter() required this.end,
       required this.comment})
       : super._();
+
+  factory _$EntryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EntryImplFromJson(json);
 
   @override
   final String id;
   @override
   final String jobId;
   @override
+  @EpochDateTimeConverter()
   final DateTime start;
   @override
+  @EpochDateTimeConverter()
   final DateTime end;
   @override
   final String comment;
@@ -171,6 +191,7 @@ class _$EntryImpl extends _Entry {
             (identical(other.comment, comment) || other.comment == comment));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, jobId, start, end, comment);
 
@@ -179,24 +200,35 @@ class _$EntryImpl extends _Entry {
   @pragma('vm:prefer-inline')
   _$$EntryImplCopyWith<_$EntryImpl> get copyWith =>
       __$$EntryImplCopyWithImpl<_$EntryImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$EntryImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Entry extends Entry {
   const factory _Entry(
       {required final String id,
       required final String jobId,
-      required final DateTime start,
-      required final DateTime end,
+      @EpochDateTimeConverter() required final DateTime start,
+      @EpochDateTimeConverter() required final DateTime end,
       required final String comment}) = _$EntryImpl;
   const _Entry._() : super._();
+
+  factory _Entry.fromJson(Map<String, dynamic> json) = _$EntryImpl.fromJson;
 
   @override
   String get id;
   @override
   String get jobId;
   @override
+  @EpochDateTimeConverter()
   DateTime get start;
   @override
+  @EpochDateTimeConverter()
   DateTime get end;
   @override
   String get comment;

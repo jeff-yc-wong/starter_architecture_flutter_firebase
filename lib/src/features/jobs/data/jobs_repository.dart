@@ -38,7 +38,7 @@ class JobsRepository {
     final entriesRef = _firestore.collection(entriesPath(uid));
     final entries = await entriesRef.get();
     for (final snapshot in entries.docs) {
-      final entry = Entry.fromJson(snapshot.data(), snapshot.id);
+      final entry = Entry.fromJson(snapshot.data()..['id'] = snapshot.id);
       if (entry.jobId == jobId) {
         await snapshot.reference.delete();
       }
@@ -53,11 +53,8 @@ class JobsRepository {
       _firestore
           .doc(jobPath(uid, jobId))
           .withConverter<Job>(
-            fromFirestore: (snapshot, _) {
-              var result = snapshot.data()!;
-              result['id'] = snapshot.id;
-              return Job.fromJson(result);
-            },
+            fromFirestore: (snapshot, _) =>
+                Job.fromJson(snapshot.data()!..['id'] = snapshot.id),
             toFirestore: (job, _) => job.toJson().remove("id"),
           )
           .snapshots()
@@ -69,11 +66,8 @@ class JobsRepository {
 
   Query<Job> queryJobs({required UserID uid}) =>
       _firestore.collection(jobsPath(uid)).withConverter(
-            fromFirestore: (snapshot, _) {
-              var result = snapshot.data()!;
-              result['id'] = snapshot.id;
-              return Job.fromJson(result);
-            },
+            fromFirestore: (snapshot, _) =>
+                Job.fromJson(snapshot.data()!..['id'] = snapshot.id),
             toFirestore: (job, _) => job.toJson().remove("id"),
           );
 

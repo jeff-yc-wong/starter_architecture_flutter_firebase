@@ -49,7 +49,7 @@ class EntriesRepository {
     Query<Entry> query =
         _firestore.collection(entriesPath(uid)).withConverter<Entry>(
               fromFirestore: (snapshot, _) =>
-                  Entry.fromJson(snapshot.data()!, snapshot.id),
+                  Entry.fromJson(snapshot.data()!..['id'] = snapshot.id),
               toFirestore: (entry, _) => entry.toJson(),
             );
     if (jobId != null) {
